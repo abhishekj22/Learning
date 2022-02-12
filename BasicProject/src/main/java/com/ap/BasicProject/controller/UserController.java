@@ -3,8 +3,11 @@ package com.ap.BasicProject.controller;
 import com.ap.BasicProject.entity.User;
 import com.ap.BasicProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +31,10 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public User createOrUpdate(@RequestBody User user){
-        return userService.createOrUpdateUser(user);
+    public ResponseEntity<Object> createOrUpdate(@RequestBody User user){
+        User updatedUser = userService.createOrUpdateUser(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(updatedUser.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @DeleteMapping("/user/{id}")
