@@ -1,6 +1,7 @@
 package com.ap.BasicProject.controller;
 
 import com.ap.BasicProject.entity.User;
+import com.ap.BasicProject.exception.UserNotFoundException;
 import com.ap.BasicProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UserController {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent())
             return user.get();
-        throw new RuntimeException("Invalid User");
+        throw new UserNotFoundException("Invalid User");
     }
 
     @GetMapping("/user")
