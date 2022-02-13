@@ -4,6 +4,8 @@ import com.ap.BasicProject.entity.User;
 import com.ap.BasicProject.exception.UserNotFoundException;
 import com.ap.BasicProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,11 +22,18 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/user/{id}")
-    public User getUserById(@PathVariable int id){
+    public EntityModel<User> getUserById(@PathVariable int id){
         Optional<User> user = userService.getUserById(id);
-        if (user.isPresent())
-            return user.get();
-        throw new UserNotFoundException("Invalid User");
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("Invalid User");
+        }
+
+        User foundUser = user.get();
+        EntityModel<User> entityModel = EntityModel.of(foundUser);
+        WebMvcLinkBuilder webMvcLinkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getUsers());
+        entityModel.add(webMvcLinkBuilder.withRel("all-users"));
+
+        return entityModel;
     }
 
     @GetMapping("/user")
