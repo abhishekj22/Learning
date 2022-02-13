@@ -1,6 +1,8 @@
 package com.ap.BasicProject.service;
 
+import com.ap.BasicProject.entity.Post;
 import com.ap.BasicProject.entity.User;
+import com.ap.BasicProject.repository.PostRepository;
 import com.ap.BasicProject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PostRepository postRepository;
 
     public Optional<User> getUserById(int id) {
         return userRepository.findById(id);
@@ -29,4 +34,9 @@ public class UserService {
     public void deleteUser(int id){
         userRepository.deleteById(id);
     }
+
+    public void createPost(Post post){
+        postRepository.save(post);
+    }
+
 }

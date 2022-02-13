@@ -1,5 +1,6 @@
 package com.ap.BasicProject.controller;
 
+import com.ap.BasicProject.entity.Post;
 import com.ap.BasicProject.entity.User;
 import com.ap.BasicProject.exception.UserNotFoundException;
 import com.ap.BasicProject.service.UserService;
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<Object> createOrUpdate(@Valid @RequestBody User user){
+    public ResponseEntity<Object> createOrUpdateUser(@Valid @RequestBody User user){
         User updatedUser = userService.createOrUpdateUser(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(updatedUser.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -51,5 +52,28 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     public void deleteUser(@PathVariable int id){
         userService.deleteUser(id);
+    }
+
+    @PostMapping("/user/{id}/post")
+    public ResponseEntity<Object> createPost(@PathVariable int id, @RequestBody Post post){
+        Optional<User> user = userService.getUserById(id);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("Invalid User");
+        }
+
+        User foundUser = user.get();
+        post.setUser(foundUser);
+        userService.createPost(post);
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/{id}/post").buildAndExpand(foundUser.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping("/user/{id}/post")
+    public List<Post> getAllPostByUser(@PathVariable int id){
+        Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            return user.get().getPost();
+        }
+        throw new UserNotFoundException("Invalid User");
     }
 }
