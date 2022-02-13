@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<Object> createOrUpdate(@RequestBody User user){
+    public ResponseEntity<Object> createOrUpdate(@Valid @RequestBody User user){
         User updatedUser = userService.createOrUpdateUser(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(updatedUser.getId()).toUri();
         return ResponseEntity.created(uri).build();
