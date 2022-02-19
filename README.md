@@ -22,8 +22,8 @@ Spring boot, Spring Cloud Projects
 
 [^1]: Custom Exception Handling to provide custom exceptions
 [^2]: To validate fields data
-[^3]: 
-[^4]: 
+[^3]: In addition to the data in response we can get the links to navigate to.
+[^4]: Visualize the API and explore the API
 [^5]: Hierarchical Properties is to read values from Properties files
-[^6]: 
-[^7]: 
+[^6]: Filter out fields which you don't want in response 
+[^7]: When you want to make different versions without breaking previous RestEndpoints 
