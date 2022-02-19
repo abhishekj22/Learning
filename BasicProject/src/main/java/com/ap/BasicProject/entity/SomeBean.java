@@ -1,5 +1,6 @@
 package com.ap.BasicProject.entity;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(value = {"firstField", "secondField"})
+//@JsonIgnoreProperties(value = {"firstField", "secondField"})
+@JsonFilter("someBeanFilter")
 public class SomeBean {
     private String firstField;
     private String secondField;
